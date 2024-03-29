@@ -1,19 +1,26 @@
 const generate = document.querySelector('#generate');
-const h1 = document.querySelector('h1');
+const colorName = document.querySelector('#colorName');
 const rgb = document.querySelector('#rgb');
 const hex = document.querySelector('#hex');
 const reset = document.querySelector('#rst');
 let newColor = 'rgb(0, 0, 0)';
-let hexColor = '#000000';
 let red = 0;
 let green = 0;
 let blue = 0;
 
 generate.addEventListener('click', () => {
     newColor = makeRandColor();
-    document.querySelector('body').style.backgroundColor = newColor;
-    h1.innerText = newColor;
-    TextColor(red, green, blue);
+
+    const getcolorName = async () => {
+        await axios.get(`https://www.thecolorapi.com/id?rgb=${newColor}`)
+            .then((res => {
+                colorName.innerText = res.data.name.value;
+                document.querySelector('body').style.backgroundColor = newColor;
+                setTextColor(red, green, blue);
+            }));
+    }
+
+    getcolorName();
 })
 
 rgb.addEventListener('click', () => {
@@ -21,29 +28,26 @@ rgb.addEventListener('click', () => {
 })
 
 hex.addEventListener('click', () => {
-    hexColor = rgbtoHex(red, green, blue);
+    let hexColor = rgbtoHex(red, green, blue);
     navigator.clipboard.writeText(hexColor);
 })
 
 reset.addEventListener('click', () => {
     document.querySelector('body').style.backgroundColor = 'rgb(255, 255, 255)';
     document.querySelector('h1').innerText = 'Pick a Random Color!';
-    h1.classList.remove("text-light");
+    colorName.classList.remove("text-light");
 })
 
 const rgbtoHex = (red, green, blue) => {
     return `#${((red << 16) | (green << 8) | blue).toString(16)}`
-} 
+}
 
-function TextColor(red, green , blue)
-{
-    if( (red + green + blue) <= 200)
-    {
-        h1.classList.add("text-light");
+function setTextColor(red, green, blue) {
+    if ((red + green + blue) <= 200) {
+        colorName.classList.add("text-light");
     }
-    else
-    {
-        h1.classList.remove("text-light");
+    else {
+        colorName.classList.remove("text-light");
     }
 }
 
