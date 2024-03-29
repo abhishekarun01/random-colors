@@ -34,7 +34,7 @@ hex.addEventListener('click', () => {
 
 reset.addEventListener('click', () => {
     document.querySelector('body').style.backgroundColor = 'rgb(255, 255, 255)';
-    document.querySelector('h1').innerText = 'Pick a Random Color!';
+    document.querySelector('h1').innerText = 'Generate your Random Color!';
     colorName.classList.remove("text-light");
 })
 
